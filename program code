@@ -1,0 +1,133 @@
+import java.util.Scanner;
+public class SP22_BCS_074{
+    public static void main(String[] args){
+	System.out.println("AoA, Welcome to Inheritence Calculator.");
+	
+	Scanner input = new Scanner(System.in);
+	System.out.print("Please enter value of inheritence : ");
+	double inheritance = input.nextDouble();
+
+	System.out.print("What is the value of loan, if any : ");
+	double loan = input.nextDouble();
+
+	System.out.print("If the deceased has left any will enter the value of the will : ");
+	double will = input.nextDouble();	
+	
+	inheritance = inheritance - loan;     	
+	
+	if(will>inheritance/3){
+	    will = inheritance/3;
+	    inheritance = inheritance - will;		//subtracting the value of loan from total inheritance
+	}
+	else{
+	    inheritance = inheritance - will;		//subtracting the value of will from total inheritance
+	}
+
+	System.out.printf("The divide able value of inheritance is %.2f%n%n" , inheritance);
+
+	System.out.print("How many sons does the deceased have? ");	//inputting information about the family of the deceased
+	int son = input.nextInt();
+
+	System.out.print("How many daughters does the deceased have? ");
+	int daughter = input.nextInt();
+
+	System.out.print("Is mother of deceased alive or not? if alive enter 1 else 0 : ");
+	int mom = input.nextInt();
+
+	System.out.print("Is father of deceased alive or not? if alive enter 1 else 0 : ");
+	int dad = input.nextInt();
+
+	System.out.print("Deceased has any sibling or not? if has enter 1 else 0 : ");
+	int sibling = input.nextInt();
+	
+	double share_Mom = 0;		//Declaring and initializing shares		
+	double share_Dad = 0;
+	double share_Daughter = 0;
+	double share_Son = 0;
+	double share_Sibling = 0;
+
+	double total_share = 100;		//total percentage share
+	double part;
+	
+	
+
+	if(mom==1){				//Calculates the share of mother if alive
+	    if(son==0 && daughter==0){		
+		share_Mom = inheritance/3;		//Share of mother if deceased has no offspring
+		total_share = total_share - 33.33;
+	    }
+	    else if(son>0 || daughter>0){
+		share_Mom = inheritance/6;		//Share of mother if deceased has offspring
+		total_share = total_share - 16.66;
+	    }
+	   
+	}
+	
+	if(son==0 && daughter>0){			//Share of daughter incase deaceased has no son
+	    if(daughter==1){
+		share_Daughter = inheritance/2;		//Share of single daughter
+		total_share = total_share - 50;
+	    }
+	    else{
+		share_Daughter = (inheritance*2/3)/daughter;	//Share of daughter if more than one
+		total_share = total_share - 66.66;
+	    }
+	 }
+
+	if(dad==1){				//Share of father if alive
+	    if(son==0 && daughter==0){		
+		share_Dad = inheritance*2/3;	//Share of father incase deceased has no offspring
+		total_share = total_share - 66.66;
+	    }
+	    else{
+		share_Dad = inheritance/6;		//Share of father incase deceased has offspring
+		total_share = total_share - 16.66;
+	    }
+	    
+	}
+
+	if(son>0){
+	    if(daughter==0){
+	    	share_Son = (inheritance*2/3)/son;		//Share of son incase deceased has no daughter
+	 	total_share = total_share - 66.66;
+	    }
+	    else if(daughter>0){			
+		part = total_share/(2*son + daughter);	//calculating one part of remaining percentage shares
+		share_Son = inheritance*(2*part)/100;	//Share of son incase deceased has both son and daughter
+		share_Daughter = inheritance*part/100;	//Share of daughter incase deceased has both son and daughter
+		total_share = 0;
+	    }
+	    
+		if(total_share > 16.66){
+		share_Son = share_Son + (inheritance*total_share/100);	//After providing everyone their share, remaining shares are given to son
+		total_share = 0;
+	    }	
+	}
+	
+	
+	
+	if(total_share > 16.66 && dad==1){
+	    share_Dad = share_Dad + (inheritance*total_share/100);	//Incase of no son, remaining shares are given to the father 
+  	}
+	
+	System.out.println();
+	
+	//Printing the shares of those who inherit
+
+	if(dad>0){
+	    System.out.printf("The share of father is %.2f%n" , share_Dad);} 
+	if(mom>0){
+	     System.out.printf("The share of mother is %.2f%n" , share_Mom);} 
+	if(son>0){
+	    System.out.printf("The share of son is %.2f%n" , share_Son);}
+	if(daughter>0){
+	    System.out.printf("The share of daughter is %.2f%n" , share_Daughter);}
+	  
+	
+	if(dad==0 && son==0){			//Siblings receive share incase deaceased has no son or father
+	    if(sibling>0){
+	    share_Sibling = (inheritance*total_share/100);
+	    System.out.printf("The share of siblings is %.2f%n" , share_Sibling);}
+	}
+    }
+}
